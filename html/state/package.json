@@ -1,0 +1,14 @@
+{
+  "name": "0f9a98585116d9d2",
+  "main": "0f9a98585116d9d2@1066.js",
+  "version": "1066.0.0",
+  "homepage": "https://observablehq.com/d/0f9a98585116d9d2",
+  "author": {
+    "name": "COVID-VIZ",
+    "url": "https://observablehq.com/@ylan1"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
