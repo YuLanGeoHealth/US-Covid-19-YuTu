@@ -1,0 +1,14 @@
+{
+  "name": "129c67a129a15a4e",
+  "main": "129c67a129a15a4e@1932.js",
+  "version": "1932.0.0",
+  "homepage": "https://observablehq.com/d/129c67a129a15a4e",
+  "author": {
+    "name": "Yu Lan",
+    "url": "https://observablehq.com/@ylan1"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
