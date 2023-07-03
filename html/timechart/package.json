@@ -1,0 +1,14 @@
+{
+  "name": "@ylan1/animated-bivariate-map-timechart-of-covid-19-2021",
+  "main": "f61be208b3183f31@1385.js",
+  "version": "1385.0.0",
+  "homepage": "https://observablehq.com/@ylan1/animated-bivariate-map-timechart-of-covid-19-2021",
+  "author": {
+    "name": "COVID-VIZ",
+    "url": "https://observablehq.com/@ylan1"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
