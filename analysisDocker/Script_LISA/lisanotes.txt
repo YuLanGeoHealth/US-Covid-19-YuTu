@@ -1,0 +1,28 @@
+#process
+export from db (lisa.sh)=> shp =>py(get lisa analysis) => import into database
+
+
+#import shp into postgis (only once)
+shp2pgsql -s 4326 /mnt/us48pop.shp county | PGPASSWORD=password psql -U postgres -d covid19 -h covidData
+
+#select and join data from database
+SELECT * FROM county JOIN cases ON fips = fips where collect_date = '2022-05-01' | PGPASSWORD=password psql -U postgres -d covid19 -h covidData
+
+SELECT * INTO lisa FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-01';
+
+step 1. #Export query to a shape file/// !!!time comsuming but one day is okay
+pgsql2shp -f "/mnt/sqldata/lisa0" -h covidData -u postgres -P password covid19 "SELECT geoid, collect_date, cases.case_avg7/county.pop as caseper, geom FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-01'"
+pgsql2shp -f "/mnt/sqldata/lisa1" -h covidData -u postgres -P password covid19 "SELECT geoid, collect_date, cases.case_avg7/county.pop as caseper, geom FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-02'"
+pgsql2shp -f "/mnt/sqldata/lisa2" -h covidData -u postgres -P password covid19 "SELECT geoid, collect_date, cases.case_avg7/county.pop as caseper, geom FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-03'"
+pgsql2shp -f "/mnt/sqldata/lisa3" -h covidData -u postgres -P password covid19 "SELECT geoid, collect_date, cases.case_avg7/county.pop as caseper, geom FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-04'"
+pgsql2shp -f "/mnt/sqldata/lisa4" -h covidData -u postgres -P password covid19 "SELECT geoid, collect_date, cases.case_avg7/county.pop as caseper, geom FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-05'"
+pgsql2shp -f "/mnt/sqldata/lisa5" -h covidData -u postgres -P password covid19 "SELECT geoid, collect_date, cases.case_avg7/county.pop as caseper, geom FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-06'"
+pgsql2shp -f "/mnt/sqldata/lisa6" -h covidData -u postgres -P password covid19 "SELECT geoid, collect_date, cases.case_avg7/county.pop as caseper, geom FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-07'"
+pgsql2shp -f "/mnt/sqldata/lisa7" -h covidData -u postgres -P password covid19 "SELECT geoid, collect_date, cases.case_avg7/county.pop as caseper, geom FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-08'"
+pgsql2shp -f "/mnt/sqldata/lisa8" -h covidData -u postgres -P password covid19 "SELECT geoid, collect_date, cases.case_avg7/county.pop as caseper, geom FROM county INNER JOIN cases ON geoid = cases.fips where collect_date = '2022-05-09'"
+
+
+
+
+#Export lisa from db to shp
+pgsql2shp -f "/mnt/sqldata/lisa" -h covidData -u postgres -P password covid19 public.lisa
