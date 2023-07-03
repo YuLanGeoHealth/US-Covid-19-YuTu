@@ -1,0 +1,5 @@
+docker pull --platform=linux/amd64 postgis/postgis
+docker run --name covidData -p 5433:5432 -e POSTGRES_PASSWORD=password -v /Users/yu/work/dockerProject/databaseDocker/data:/var/lib/postgresql/data -d postgis/postgis
+
+
+docker cp /Users/yu/work/dockerProject/databaseDocker/importData/shp covidData:/tmp
