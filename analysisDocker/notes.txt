@@ -1,0 +1,72 @@
+docker pull --platform=linux/amd64 ubuntu
+
+docker run -v /Users/yu/work/dockerProject/analysisDocker/data:/mnt --name analysis -it ubuntu
+
+steps:
+1. install java
+apt-get update
+apt-get install build-essential
+apt install default-jre
+apt-get install iputils-ping 
+apt install iproute2
+
+2. install SatScan
+java -jar install-10.0.2_linux.jar
+dir: /usr/local/SaTScan/
+SatScan:
+https://www.satscan.org/download_satscan_for_linux.html 
+password: spatial
+
+3. intall python
+https://linuxize.com/post/how-to-install-python-3-7-on-ubuntu-18-04/
+apt install software-properties-common
+add-apt-repository ppa:deadsnakes/ppa
+apt install python3
+
+4.import csv to postgres
+docker exec -it analysis psql -U postgres -d covid19 -h covidData 
+\copy cases FROM '/mnt/Script_LISA/2020.csv' DELIMITER ',' CSV HEADER;
+\copy cases FROM '/mnt/dailyUS_062922.csv' DELIMITER ',' CSV HEADER;
+\copy cases FROM '/mnt/dailyUS_062922.csv' DELIMITER ',' CSV HEADER;
+
+
+#import lisa result to database
+\copy lisa FROM '/mnt/sqldata/lisa/2101-04.csv' DELIMITER ',' CSV HEADER;
+
+#shp into postgis
+shp2pgsql -s 4326 /mnt/us48pop.shp county | PGPASSWORD=password psql -U postgres -d covid19 -h covidData
+
+5.install python library
+apt install python3-pandas
+apt install python3-numpy
+apt install python3-geopandas
+python3 UpdatedDaily.py ##update daily cases
+
+6.install psql client
+apt-get install postgis
+apt-get install postgresql-client  
+
+7. need to connect to one network(myNetwork)
+
+8.install pygeodata
+apt install git-all #git
+apt install python3-pip
+pip install git+https://github.com/GeoDaCenter/pygeoda #long time
+
+###
+docker exec -it analysis bash
+
+#lisa category
+'Not significant', 'High-High', 'Low-Low', 'High-Low', 'Low-High',
+from pygeoda: 0,1,2,3,4
+for visualization: ,4,1,3,2
+
+\COPY (SELECT * FROM sat_cluster ORDER BY date ASC) TO '/mnt/sqldata/allcluster.csv' DELIMITER ',' CSV HEADER;
+\COPY (SELECT * FROM lisa ORDER BY date ASC) TO '/mnt/sqldata/lisa.csv' DELIMITER ',' CSV HEADER;
+\COPY (SELECT * FROM county_rr ORDER BY date ASC) TO '/mnt/sqldata/rr.csv' DELIMITER ',' CSV HEADER;
+\COPY (SELECT * FROM cases WHERE (collect_date >='"2020-09-01"' )) TO '/mnt/sqldata/cases_20200901.csv' DELIMITER ',' CSV HEADER;
+
+
+\COPY (SELECT fips,collect_date,case_avg7 FROM cases ORDER BY collect_date ASC) TO '/mnt/sqldata/cases_all.csv' DELIMITER ',' CSV HEADER;
+
+\COPY (SELECT * FROM county_rr ORDER BY date ASC) TO '/mnt/sqldata/rr_allnew.csv' DELIMITER ',' CSV HEADER;

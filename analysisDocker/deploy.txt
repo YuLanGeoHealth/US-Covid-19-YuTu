@@ -1,0 +1,59 @@
+Scripts need to run in the analysis server
+
+################################################
+Database server: covidData (name)
+~Update daily cases
+    -data/updateDaily/dateImport.sh
+    -set run every day at 1am
+~Update cases during a range
+    -data/updateDaily/dateImport_range.sh
+    -only once 
+~Commands
+    - cd mnt/updateDaily/
+    - sh dateImport_range.sh
+================================================
+
+
+################################################
+Analysis server: analysis (name)
+~SaTScan
+    -generate within a time range
+        ` data/Script_SatScan/GenSaTScan_windows.sh 
+            -(generate satscan files and use windows pc to run analysis)
+        ` data/Script_SatScan/Deal_result.sh
+            -deal result from window and import into database
+    -spiral map (avg rr at the state level)
+        `range
+            -data/spiral/spiral_range.sh
+        `daily
+            -
+    -daily SaTScan results
+
+    
+~LISA
+    -generate within a time range
+        ` data/Script_LISA/lisa_range.sh
+    -daily SaTScan results
+        ` data/Script_LISA/lisa_daily.sh
+================================================
+
+
+################################################
+Data for Interface server: app(name)
+~generate data into 
+    ` /opt(analysis server):/var/www/html/data/(webapp server)
+~bivariate map
+    -export from sat_cluster & need to use add0.py to add leading zero
+    -analysis script to generate data and copy data to var/www/html/app/
+~timechart
+~spiralmap
+~3D
+================================================
+
+################################################
+daily run .sh
+    -cron
+        ` dpkg -l cron #package manager
+        ` crontab -l  #list all jobs
+
+================================================
