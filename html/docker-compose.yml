@@ -1,0 +1,15 @@
+version: "2.1"
+services:
+  webapp:
+    image: webapp
+    container_name: interface
+    networks:
+      - myNetwork
+    volumes:
+      - /var/app/app/:/app
+    ports:
+      - 8080:8080
+    restart: "no"
+networks:
+  myNetwork:
+    external: true
